@@ -3,7 +3,6 @@
 import { ConfirmDialog } from '@/components/confirm-dialog'
 import { createClient } from '../../../lib/client'
 import { useAuthStore } from '../../../stores/auth-store'
-import { signOut as nextAuthSignOut } from 'next-auth/react'
 
 interface SignOutDialogProps {
   open: boolean
@@ -19,6 +18,7 @@ export function SignOutDialog({ open, onOpenChange }: SignOutDialogProps) {
     }
 
     try {
+      const { signOut: nextAuthSignOut } = await import('next-auth/react')
       await nextAuthSignOut({ redirect: false })
     } catch (err) {
       // ignore

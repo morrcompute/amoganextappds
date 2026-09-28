@@ -172,21 +172,6 @@ export function UserAuthForm({
     try {
       const supabase = createClient()
 
-      // Check if email exists in profiles table (our records)
-      const { data: profileList } = await supabase
-        .from('profiles')
-        .select('id')
-        .eq('email', data.email)
-
-      const emailExists = profileList && profileList.length > 0
-
-      if (!emailExists) {
-        toast.error('Account not found in our records. Redirecting to Sign Up...')
-        await sleep(1500)
-        router.push(`/sign-up?email=${encodeURIComponent(data.email)}`)
-        return
-      }
-
       const { data: authData, error } = await supabase.auth.signInWithPassword({
         email: data.email,
         password: data.password,
@@ -199,16 +184,18 @@ export function UserAuthForm({
       const user = authData.user
       if (!user) throw new Error('No user returned from sign in.')
 
-      auth.setUser({
+      const userObj = {
         id: user.id,
         accountNo: user.id,
         email: user.email!,
-        name: user.user_metadata?.name || user.user_metadata?.full_name || user.email!.split('@')[0],
+        name: user.user_metadata?.name || user.user_metadata?.full_name || user.user_metadata?.display_name || user.email!.split('@')[0],
         picture: user.user_metadata?.avatar_url || undefined,
         role: ['user'],
         exp: Date.now() + 24 * 60 * 60 * 1000,
-      })
-      auth.setAccessToken(authData.session?.access_token || 'mock-access-token')
+      }
+
+      auth.setUser(userObj)
+      auth.setAccessToken(authData.session?.access_token || 'supabase-session')
 
       const storedRedirect =
         typeof window !== 'undefined'
@@ -220,7 +207,7 @@ export function UserAuthForm({
       }
       handleAuthRedirect(router, destination)
 
-      toast.success(`Welcome back, ${user.email}!`)
+      toast.success(`Welcome back, ${userObj.name || user.email}!`)
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : 'Sign in failed. Please check your credentials.'
       toast.error(message)
