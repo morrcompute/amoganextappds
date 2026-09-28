@@ -1,3 +1,5 @@
+'use client'
+
 import React from 'react'
 import { HardDrive, FileText, Image as ImageIcon, Film, Database, ArrowUpRight } from 'lucide-react'
 import { cn } from '@/lib/utils'

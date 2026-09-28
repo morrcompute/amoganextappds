@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useState } from 'react'
 import { Bot, User, Copy, Check, ThumbsUp, ThumbsDown, Sparkles, RefreshCw } from 'lucide-react'
 import { cn } from '@/lib/utils'

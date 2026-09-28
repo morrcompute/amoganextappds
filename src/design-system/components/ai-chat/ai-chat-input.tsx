@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useRef, useEffect } from 'react'
 import { ArrowUp, Mic, History, Plus } from 'lucide-react'
 import { cn } from '@/lib/utils'

@@ -1,3 +1,5 @@
+'use client'
+
 /**
  * Amoga Design System — Central Barrel Export
  *

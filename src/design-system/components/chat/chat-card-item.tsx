@@ -1,3 +1,5 @@
+'use client'
+
 import React from 'react'
 import { Users, MoreHorizontal, MessageSquare } from 'lucide-react'
 import { cn } from '@/lib/utils'
