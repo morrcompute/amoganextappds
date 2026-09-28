@@ -214,8 +214,11 @@ export function SignUpForm({
       router.replace('/')
       toast.success(`Account created for ${data.email}!`)
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'Registration failed. Please try again.'
       console.error('Signup error:', err)
+      let message = err instanceof Error ? err.message : 'Registration failed. Please try again.'
+      if (message.toLowerCase().includes('failed to fetch') || message.toLowerCase().includes('networkerror') || message.toLowerCase().includes('enotfound')) {
+        message = 'Unable to connect to Supabase. Please verify your NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY.'
+      }
       toast.error(message)
     } finally {
       setIsLoading(false)

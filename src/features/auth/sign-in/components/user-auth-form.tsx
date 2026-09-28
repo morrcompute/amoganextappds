@@ -209,7 +209,11 @@ export function UserAuthForm({
 
       toast.success(`Welcome back, ${userObj.name || user.email}!`)
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'Sign in failed. Please check your credentials.'
+      console.error('[SignIn] Error:', err)
+      let message = err instanceof Error ? err.message : 'Sign in failed. Please check your credentials.'
+      if (message.toLowerCase().includes('failed to fetch') || message.toLowerCase().includes('networkerror') || message.toLowerCase().includes('enotfound')) {
+        message = 'Unable to connect to Supabase. Please verify your NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY.'
+      }
       toast.error(message)
     } finally {
       setIsLoading(false)
